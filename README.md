@@ -2,7 +2,7 @@
 <h3 align="center">Brazilian Software Engineer</h3>
 
 <p align="center">
-     <img height="30%" width="40%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=DaviDemarqui&layout=compact&langs_count=7&theme=dark"/>
+     <img height="30%" width="40%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=juniorrondini&layout=compact&langs_count=7&theme=dark"/>
 </p>
 
 <h3 align="center">Languages and Tools:</h3>
