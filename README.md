@@ -5,7 +5,7 @@
 <p align="left">
 </p>
 
-  <img align="right" src="https://github-readme-stats.vercel.app/api?username=juniorrondini&show_icons=true&theme=dark&locale=en" alt="juniorrondini" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api?username=juniorrondini&show_icons=true&theme=dark&locale=en" alt="juniorrondini" />
 
 
 <h3 align="center">Languages and Tools:</h3>
