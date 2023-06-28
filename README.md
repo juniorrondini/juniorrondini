@@ -5,9 +5,10 @@
 <p align="left">
 </p>
 
-  <p style="text-align: center;">
-  <img src="https://github-readme-stats.vercel.app/api?username=juniorrondini&show_icons=true&theme=dark&locale=en" alt="juniorrondini" style="margin-left: 100px;" />
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=juniorrondini&show_icons=true&theme=dark&locale=en" alt="juniorrondini" class="float-left" />
 </p>
+
 
 
 
