@@ -1,6 +1,10 @@
 <h1 align="center">Hi 👋, I'm Junior Rondini</h1>
 <h3 align="center">I'm a software developer and I'm always in search of knowledge</h3>
 
+   <p align="center">
+  <img src="https://i.pinimg.com/originals/7b/e9/93/7be993ba98b8a639d2a036d06c4073f7.gif" alt="Demonstração do Sistema de Barbearia" width="100" height="100">
+</p>
+
 
 <p align="left">
 </p>
