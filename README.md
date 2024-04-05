@@ -1,4 +1,4 @@
-<h1 align="center">Hi 👋, I'm Junior Rondini</h1>
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=43E424&random=false&width=435&lines=Welcome!;I'm+Junior+Rondini)](https://git.io/typing-svg)
 <h3 align="center">I'm a software developer and I'm always in search of knowledge</h3>
 
    <p align="center">
