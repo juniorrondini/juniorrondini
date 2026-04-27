@@ -57,25 +57,17 @@ Software Developer focused on building modern, scalable and useful applications.
 
 ---
 
-## 🔥 Featured Projects
 
-> Add here your best projects. Do not list everything — only what makes you look stronger.
-
-| Project | Description | Tech |
-|---|---|---|
-| Project Name | Short description of what the project does | React, Node, SQL |
-| Project Name | Short description of what the project does | Angular, .NET |
-| Project Name | Short description of what the project does | Python, Docker |
 
 ---
 
 ## 📫 Contact
 
 <p>
-  <a href="https://www.linkedin.com/in/SEU-LINKEDIN">
+  <a href="www.linkedin.com/in/juniorrondini">
     <img src="https://skillicons.dev/icons?i=linkedin" />
   </a>
-  <a href="mailto:SEUEMAIL@email.com">
+  <a href="mailto:jjrondinijj@gmail.com">
     <img src="https://skillicons.dev/icons?i=gmail" />
   </a>
 </p>
