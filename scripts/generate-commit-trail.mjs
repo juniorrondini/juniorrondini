@@ -14,7 +14,7 @@ const letters = {
 
 const themes = {
   light: {
-    file: "dist/commit-snake.svg",
+    file: "dist/juniorrondini-commit-trail.svg",
     background: "#f6f8fa",
     panel: "#ffffff",
     panelStroke: "#d0d7de",
@@ -27,7 +27,7 @@ const themes = {
     shadow: "#43e424",
   },
   dark: {
-    file: "dist/commit-snake-dark.svg",
+    file: "dist/juniorrondini-commit-trail-dark.svg",
     background: "#0d1117",
     panel: "#101820",
     panelStroke: "#263241",

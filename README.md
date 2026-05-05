@@ -136,8 +136,8 @@ Brainfuck • LOLCODE • Rockstar • Whitespace • Chef • Befunge • Arnol
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake.svg" />
-    <img alt="Stylized commit grid spelling JuniorRondini with a neon snake trail" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake.svg" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-trail-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-trail.svg" />
+    <img alt="Stylized commit grid spelling JuniorRondini with a neon snake trail" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-trail.svg" />
   </picture>
 </p>
