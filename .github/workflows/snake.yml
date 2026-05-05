@@ -1,0 +1,31 @@
+name: Generate Commit Snake
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    name: Render contribution trail
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate neon snake SVGs
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/commit-snake.svg?color_snake=%2343E424&color_dots=%23f6f8fa,%23baf5c5,%2371e67a,%2343E424,%231d8f36
+            dist/commit-snake-dark.svg?palette=github-dark&color_snake=%2343E424&color_dots=%230d1117,%2313261a,%23216b35,%2343E424,%23b8ff7a
+
+      - name: Publish SVGs to output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

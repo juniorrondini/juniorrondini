@@ -125,3 +125,19 @@ Brainfuck • LOLCODE • Rockstar • Whitespace • Chef • Befunge • Arnol
 <p align="center">
   <strong>Build. Learn. Ship. Repeat.</strong>
 </p>
+
+---
+
+## 🟩 Commit Trail
+
+<p align="center">
+  <strong>Every commit leaves a trace. Mine gets hunted in neon.</strong>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake.svg" />
+    <img alt="Snake animation eating Junior Rondini's GitHub contributions" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake.svg" />
+  </picture>
+</p>
