@@ -131,13 +131,13 @@ Brainfuck • LOLCODE • Rockstar • Whitespace • Chef • Befunge • Arnol
 ## 🟩 Commit Trail
 
 <p align="center">
-  <strong>Every commit leaves a trace. Mine gets hunted in neon.</strong>
+  <strong>JuniorRondini carved into a neon commit grid.</strong>
 </p>
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake-dark.svg" />
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake.svg" />
-    <img alt="Snake animation eating Junior Rondini's GitHub contributions" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake.svg" />
+    <img alt="Stylized commit grid spelling JuniorRondini with a neon snake trail" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/commit-snake.svg" />
   </picture>
 </p>

@@ -7,6 +7,7 @@ on:
     paths:
       - README.md
       - .github/workflows/snake.yml
+      - scripts/generate-commit-trail.mjs
   schedule:
     - cron: "17 3 * * *"
   workflow_dispatch:
@@ -20,13 +21,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Generate neon snake SVGs
-        uses: Platane/snk/svg-only@v3
-        with:
-          github_user_name: ${{ github.repository_owner }}
-          outputs: |
-            dist/commit-snake.svg?color_snake=%2343E424&color_dots=%23f6f8fa,%23baf5c5,%2371e67a,%2343E424,%231d8f36
-            dist/commit-snake-dark.svg?palette=github-dark&color_snake=%2343E424&color_dots=%230d1117,%2313261a,%23216b35,%2343E424,%23b8ff7a
+      - name: Checkout profile source
+        uses: actions/checkout@v4
+
+      - name: Generate branded commit trail
+        run: node scripts/generate-commit-trail.mjs
 
       - name: Publish SVGs to output branch
         uses: crazy-max/ghaction-github-pages@v4
