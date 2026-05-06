@@ -14,7 +14,7 @@ const letters = {
 
 const themes = {
   light: {
-    file: "dist/juniorrondini-commit-snake-v3.svg",
+    file: "dist/juniorrondini-commit-snake-v4.svg",
     background: "#f6f8fa",
     panel: "#ffffff",
     panelStroke: "#d0d7de",
@@ -27,7 +27,7 @@ const themes = {
     shadow: "#43e424",
   },
   dark: {
-    file: "dist/juniorrondini-commit-snake-v3-dark.svg",
+    file: "dist/juniorrondini-commit-snake-v4-dark.svg",
     background: "#0d1117",
     panel: "#101820",
     panelStroke: "#263241",
@@ -140,28 +140,16 @@ function renderSnakePath(route) {
   return [leadIn, ...points].join(" ");
 }
 
-function pathLength(route) {
-  const points = [{ x: Math.max(36, route[0].x - 34), y: route[0].y }, ...route];
-
-  return points.slice(1).reduce((total, point, index) => {
-    const previous = points[index];
-    const dx = point.x - previous.x;
-    const dy = point.y - previous.y;
-
-    return total + Math.hypot(dx, dy);
-  }, 0);
-}
-
 function renderSvg(theme) {
   const matrix = buildMatrix(name);
-  const gridWidth = matrix[0].length * 11 - 3;
   const route = buildRoute(matrix);
   const eatOrder = buildEatOrder(route);
   const snakePath = renderSnakePath(route);
   const snakeHeadStart = route[0];
-  const snakeLength = 92;
-  const dashGap = Math.ceil(pathLength(route) + snakeLength + 80);
-  const dashOffset = dashGap;
+  const snakeLength = 54;
+  const hotLength = 16;
+  const dashEnd = -(1000 - snakeLength);
+  const hotDashEnd = -(1000 - hotLength);
 
   return `<svg width="1000" height="280" viewBox="0 0 1000 280" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="title desc">
   <title id="title">Junior Rondini commit trail</title>
@@ -178,8 +166,8 @@ function renderSvg(theme) {
     .level3{fill:${theme.levels[2]}}
     .level4{fill:${theme.levels[3]}}
     .trail-guide{fill:none;stroke:none}
-    .trail{fill:none;stroke:${theme.snake};stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:${snakeLength} ${dashGap};stroke-dashoffset:${dashOffset};filter:url(#glow)}
-    .trail-hot{fill:none;stroke:${theme.snakeHot};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:28 ${dashGap};stroke-dashoffset:${dashOffset}}
+    .trail{fill:none;stroke:${theme.snake};stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:${snakeLength} 2000;stroke-dashoffset:${snakeLength};filter:url(#glow)}
+    .trail-hot{fill:none;stroke:${theme.snakeHot};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:${hotLength} 2000;stroke-dashoffset:${hotLength}}
     .head{fill:${theme.snake};filter:url(#glow)}
     .eye{fill:#0d1117}
     .spark{fill:${theme.snakeHot};animation:blink 1.8s ease-in-out infinite}
@@ -199,15 +187,15 @@ function renderSvg(theme) {
   <g>
     ${renderCells(matrix, theme, eatOrder)}
   </g>
-  <path id="eat-path" class="trail-guide" d="${snakePath}"/>
-  <path class="trail" d="${snakePath}">
-    <animate attributeName="stroke-dashoffset" values="${dashOffset};0" dur="${grid.duration}s" repeatCount="indefinite"/>
+  <path id="eat-path" class="trail-guide" d="${snakePath}" pathLength="1000"/>
+  <path class="trail" d="${snakePath}" pathLength="1000">
+    <animate attributeName="stroke-dashoffset" values="${snakeLength};${dashEnd}" dur="${grid.duration}s" calcMode="linear" repeatCount="indefinite"/>
   </path>
-  <path class="trail-hot" d="${snakePath}">
-    <animate attributeName="stroke-dashoffset" values="${dashOffset};0" dur="${grid.duration}s" repeatCount="indefinite"/>
+  <path class="trail-hot" d="${snakePath}" pathLength="1000">
+    <animate attributeName="stroke-dashoffset" values="${hotLength};${hotDashEnd}" dur="${grid.duration}s" calcMode="linear" repeatCount="indefinite"/>
   </path>
   <g>
-    <animateMotion dur="${grid.duration}s" repeatCount="indefinite" rotate="auto">
+    <animateMotion dur="${grid.duration}s" calcMode="paced" repeatCount="indefinite" rotate="auto">
       <mpath href="#eat-path" xlink:href="#eat-path"/>
     </animateMotion>
     <circle class="head" cx="0" cy="0" r="13"/>
