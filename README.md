@@ -131,13 +131,13 @@ Brainfuck • LOLCODE • Rockstar • Whitespace • Chef • Befunge • Arnol
 ## 🟩 Commit Trail
 
 <p align="center">
-  <strong>JuniorRondini carved into a neon commit grid.</strong>
+  <strong>JuniorRondini carved into a commit grid, eaten cell by cell.</strong>
 </p>
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-trail-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-trail.svg" />
-    <img alt="Stylized commit grid spelling JuniorRondini with a neon snake trail" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-trail.svg" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-snake-v2-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-snake-v2.svg" />
+    <img alt="Stylized commit grid spelling JuniorRondini while a neon snake eats each cell" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-snake-v2.svg" />
   </picture>
 </p>

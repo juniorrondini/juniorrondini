@@ -14,7 +14,7 @@ const letters = {
 
 const themes = {
   light: {
-    file: "dist/juniorrondini-commit-trail.svg",
+    file: "dist/juniorrondini-commit-snake-v2.svg",
     background: "#f6f8fa",
     panel: "#ffffff",
     panelStroke: "#d0d7de",
@@ -27,7 +27,7 @@ const themes = {
     shadow: "#43e424",
   },
   dark: {
-    file: "dist/juniorrondini-commit-trail-dark.svg",
+    file: "dist/juniorrondini-commit-snake-v2-dark.svg",
     background: "#0d1117",
     panel: "#101820",
     panelStroke: "#263241",
@@ -65,55 +65,120 @@ function cellClass(rowIndex, columnIndex) {
   return `level${((rowIndex * 3 + columnIndex * 5) % 4) + 1}`;
 }
 
-function renderCells(matrix, theme) {
-  const size = 8;
-  const gap = 3;
-  const offsetX = 76;
-  const offsetY = 126;
+const grid = {
+  size: 8,
+  gap: 3,
+  offsetX: 76,
+  offsetY: 126,
+  duration: 18,
+};
+
+function cellCenter(rowIndex, columnIndex) {
+  const step = grid.size + grid.gap;
+
+  return {
+    x: grid.offsetX + columnIndex * step + grid.size / 2,
+    y: grid.offsetY + rowIndex * step + grid.size / 2,
+  };
+}
+
+function buildRoute(matrix) {
+  const route = [];
+  let currentRow = matrix.length - 1;
+
+  for (let columnIndex = 0; columnIndex < matrix[0].length; columnIndex += 1) {
+    const rows = matrix
+      .map((row, rowIndex) => (row[columnIndex] === "1" ? rowIndex : null))
+      .filter((rowIndex) => rowIndex !== null);
+
+    if (rows.length === 0) {
+      continue;
+    }
+
+    const ascending = [...rows].sort((a, b) => a - b);
+    const descending = [...ascending].reverse();
+    const orderedRows =
+      Math.abs(ascending[0] - currentRow) <= Math.abs(descending[0] - currentRow)
+        ? ascending
+        : descending;
+
+    orderedRows.forEach((rowIndex) => {
+      route.push({ rowIndex, columnIndex, ...cellCenter(rowIndex, columnIndex) });
+    });
+
+    currentRow = orderedRows.at(-1);
+  }
+
+  return route;
+}
+
+function buildEatOrder(route) {
+  return new Map(
+    route.map((point, index) => [`${point.rowIndex}:${point.columnIndex}`, index]),
+  );
+}
+
+function renderCells(matrix, theme, eatOrder) {
+  const stepDelay = grid.duration / Math.max(eatOrder.size, 1);
 
   return matrix
     .flatMap((row, rowIndex) =>
       row.map((cell, columnIndex) => {
-        const x = offsetX + columnIndex * (size + gap);
-        const y = offsetY + rowIndex * (size + gap);
+        const x = grid.offsetX + columnIndex * (grid.size + grid.gap);
+        const y = grid.offsetY + rowIndex * (grid.size + grid.gap);
         const cssClass = cell === "1" ? cellClass(rowIndex, columnIndex) : "empty";
-        const delay = ((rowIndex + columnIndex) % 9) * 0.08;
 
-        return `<rect class="${cssClass}" x="${x}" y="${y}" width="${size}" height="${size}" rx="2"><animate attributeName="opacity" values=".72;1;.72" dur="2.8s" begin="${delay}s" repeatCount="indefinite"/></rect>`;
+        if (cell !== "1") {
+          return `<rect class="${cssClass}" x="${x}" y="${y}" width="${grid.size}" height="${grid.size}" rx="2"/>`;
+        }
+
+        const order = eatOrder.get(`${rowIndex}:${columnIndex}`) ?? 0;
+        const delay = (order * stepDelay).toFixed(2);
+
+        return `<rect class="${cssClass}" x="${x}" y="${y}" width="${grid.size}" height="${grid.size}" rx="2">
+      <animate attributeName="opacity" values="1;1;.12;.12;1" keyTimes="0;.02;.08;.84;1" dur="${grid.duration}s" begin="${delay}s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="${theme.levels.at(-1)};${theme.empty};${theme.empty};${theme.levels.at(-1)}" keyTimes="0;.08;.84;1" dur="${grid.duration}s" begin="${delay}s" repeatCount="indefinite"/>
+    </rect>`;
       }),
     )
     .join("\n    ");
 }
 
+function renderSnakePath(route) {
+  const leadIn = `M ${Math.max(36, route[0].x - 44)} ${route[0].y + 30}`;
+  const points = route.map((point) => `L ${point.x.toFixed(1)} ${point.y.toFixed(1)}`);
+
+  return [leadIn, ...points].join(" ");
+}
+
 function renderSvg(theme) {
   const matrix = buildMatrix(name);
   const gridWidth = matrix[0].length * 11 - 3;
-  const gridStart = 76;
-  const gridEnd = gridStart + gridWidth;
-  const snakePath = `M ${gridStart - 26} 214 C 164 96, 250 218, 338 132 S 492 94, 586 158 S 722 218, ${gridEnd + 18} 142`;
+  const route = buildRoute(matrix);
+  const eatOrder = buildEatOrder(route);
+  const snakePath = renderSnakePath(route);
+  const snakeHeadStart = route[0];
 
-  return `<svg width="1000" height="280" viewBox="0 0 1000 280" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  return `<svg width="1000" height="280" viewBox="0 0 1000 280" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="title desc">
   <title id="title">Junior Rondini commit trail</title>
-  <desc id="desc">A stylized contribution grid spelling JuniorRondini with a neon snake trail.</desc>
+  <desc id="desc">A stylized contribution grid spelling JuniorRondini while a neon snake eats each commit cell.</desc>
   <style>
     .background{fill:${theme.background}}
     .panel{fill:${theme.panel};stroke:${theme.panelStroke}}
     .title{fill:${theme.text};font:700 28px Segoe UI,Arial,sans-serif}
     .subtitle{fill:${theme.muted};font:600 13px Segoe UI,Arial,sans-serif;letter-spacing:.12em}
     .caption{fill:${theme.muted};font:500 14px Segoe UI,Arial,sans-serif}
-    .empty{fill:${theme.empty};opacity:.5}
+    .empty{fill:${theme.empty};opacity:.32}
     .level1{fill:${theme.levels[0]}}
     .level2{fill:${theme.levels[1]}}
     .level3{fill:${theme.levels[2]}}
     .level4{fill:${theme.levels[3]}}
-    .trail-shadow{stroke:${theme.shadow};stroke-width:20;stroke-linecap:round;stroke-linejoin:round;opacity:.18;filter:url(#glow)}
-    .trail{stroke:${theme.snake};stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:72 18;animation:dash 4s linear infinite;filter:url(#glow)}
-    .trail-hot{stroke:${theme.snakeHot};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:18 72;animation:dash 2.2s linear infinite}
-    .head{fill:${theme.snake};filter:url(#glow);animation:pulse 1.6s ease-in-out infinite}
+    .trail-guide{stroke:${theme.shadow};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.16}
+    .trail{stroke:${theme.snake};stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:150 850;stroke-dashoffset:1000;filter:url(#glow)}
+    .trail-hot{stroke:${theme.snakeHot};stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:42 958;stroke-dashoffset:1000}
+    .head{fill:${theme.snake};filter:url(#glow)}
     .eye{fill:#0d1117}
     .spark{fill:${theme.snakeHot};animation:blink 1.8s ease-in-out infinite}
-    @keyframes dash{to{stroke-dashoffset:-180}}
-    @keyframes pulse{50%{transform:scale(1.08);transform-origin:${gridEnd + 18}px 142px}}
     @keyframes blink{50%{opacity:.28}}
   </style>
   <defs>
@@ -126,19 +191,29 @@ function renderSvg(theme) {
   <rect class="panel" x="24" y="24" width="952" height="232" rx="14"/>
   <text class="subtitle" x="76" y="66">CUSTOM COMMIT TRAIL</text>
   <text class="title" x="76" y="101">${name}</text>
-  <text class="caption" x="76" y="232">Commit-style signature grid. Real history stays real; the profile gets the neon treatment.</text>
+  <text class="caption" x="76" y="232">Snake mode: each glowing cell is eaten in sequence, then the signature respawns.</text>
   <g>
-    ${renderCells(matrix, theme)}
+    ${renderCells(matrix, theme, eatOrder)}
   </g>
-  <path class="trail-shadow" d="${snakePath}"/>
-  <path class="trail" d="${snakePath}"/>
-  <path class="trail-hot" d="${snakePath}"/>
-  <circle class="head" cx="${gridEnd + 18}" cy="142" r="18"/>
-  <circle class="eye" cx="${gridEnd + 24}" cy="136" r="2.6"/>
-  <circle class="eye" cx="${gridEnd + 25}" cy="148" r="2.6"/>
+  <path id="eat-path" class="trail-guide" d="${snakePath}" pathLength="1000"/>
+  <path class="trail" d="${snakePath}" pathLength="1000">
+    <animate attributeName="stroke-dashoffset" values="1000;0;0" keyTimes="0;.92;1" dur="${grid.duration}s" repeatCount="indefinite"/>
+  </path>
+  <path class="trail-hot" d="${snakePath}" pathLength="1000">
+    <animate attributeName="stroke-dashoffset" values="1000;0;0" keyTimes="0;.92;1" dur="${grid.duration}s" repeatCount="indefinite"/>
+  </path>
+  <g>
+    <animateMotion dur="${grid.duration}s" repeatCount="indefinite" rotate="auto">
+      <mpath href="#eat-path" xlink:href="#eat-path"/>
+    </animateMotion>
+    <circle class="head" cx="0" cy="0" r="13"/>
+    <circle class="eye" cx="4" cy="-4" r="2.2"/>
+    <circle class="eye" cx="5" cy="5" r="2.2"/>
+  </g>
   <circle class="spark" cx="860" cy="86" r="4"/>
   <circle class="spark" cx="898" cy="190" r="5" style="animation-delay:.55s"/>
   <circle class="spark" cx="930" cy="132" r="3.5" style="animation-delay:1.1s"/>
+  <circle class="spark" cx="${snakeHeadStart.x}" cy="${snakeHeadStart.y}" r="3" style="animation-delay:1.4s"/>
 </svg>
 `;
 }
