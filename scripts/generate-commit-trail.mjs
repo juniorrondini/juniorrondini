@@ -14,7 +14,7 @@ const letters = {
 
 const themes = {
   light: {
-    file: "dist/juniorrondini-commit-snake-v2.svg",
+    file: "dist/juniorrondini-commit-snake-v3.svg",
     background: "#f6f8fa",
     panel: "#ffffff",
     panelStroke: "#d0d7de",
@@ -27,7 +27,7 @@ const themes = {
     shadow: "#43e424",
   },
   dark: {
-    file: "dist/juniorrondini-commit-snake-v2-dark.svg",
+    file: "dist/juniorrondini-commit-snake-v3-dark.svg",
     background: "#0d1117",
     panel: "#101820",
     panelStroke: "#263241",
@@ -84,29 +84,16 @@ function cellCenter(rowIndex, columnIndex) {
 
 function buildRoute(matrix) {
   const route = [];
-  let currentRow = matrix.length - 1;
 
-  for (let columnIndex = 0; columnIndex < matrix[0].length; columnIndex += 1) {
-    const rows = matrix
-      .map((row, rowIndex) => (row[columnIndex] === "1" ? rowIndex : null))
-      .filter((rowIndex) => rowIndex !== null);
+  for (let rowIndex = 0; rowIndex < matrix.length; rowIndex += 1) {
+    const columns =
+      rowIndex % 2 === 0
+        ? [...matrix[rowIndex].keys()]
+        : [...matrix[rowIndex].keys()].reverse();
 
-    if (rows.length === 0) {
-      continue;
-    }
-
-    const ascending = [...rows].sort((a, b) => a - b);
-    const descending = [...ascending].reverse();
-    const orderedRows =
-      Math.abs(ascending[0] - currentRow) <= Math.abs(descending[0] - currentRow)
-        ? ascending
-        : descending;
-
-    orderedRows.forEach((rowIndex) => {
+    columns.forEach((columnIndex) => {
       route.push({ rowIndex, columnIndex, ...cellCenter(rowIndex, columnIndex) });
     });
-
-    currentRow = orderedRows.at(-1);
   }
 
   return route;
@@ -119,7 +106,7 @@ function buildEatOrder(route) {
 }
 
 function renderCells(matrix, theme, eatOrder) {
-  const stepDelay = grid.duration / Math.max(eatOrder.size, 1);
+  const lastStep = Math.max(eatOrder.size - 1, 1);
 
   return matrix
     .flatMap((row, rowIndex) =>
@@ -133,11 +120,13 @@ function renderCells(matrix, theme, eatOrder) {
         }
 
         const order = eatOrder.get(`${rowIndex}:${columnIndex}`) ?? 0;
-        const delay = (order * stepDelay).toFixed(2);
+        const eatStart = Math.max((order / lastStep) * 0.9, 0.001);
+        const eatEnd = Math.min(eatStart + 0.025, 0.93);
+        const keyTimes = `0;${eatStart.toFixed(4)};${eatEnd.toFixed(4)};.94;1`;
 
         return `<rect class="${cssClass}" x="${x}" y="${y}" width="${grid.size}" height="${grid.size}" rx="2">
-      <animate attributeName="opacity" values="1;1;.12;.12;1" keyTimes="0;.02;.08;.84;1" dur="${grid.duration}s" begin="${delay}s" repeatCount="indefinite"/>
-      <animate attributeName="fill" values="${theme.levels.at(-1)};${theme.empty};${theme.empty};${theme.levels.at(-1)}" keyTimes="0;.08;.84;1" dur="${grid.duration}s" begin="${delay}s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;1;.12;.12;1" keyTimes="${keyTimes}" dur="${grid.duration}s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="${theme.levels.at(-1)};${theme.levels.at(-1)};${theme.empty};${theme.empty};${theme.levels.at(-1)}" keyTimes="${keyTimes}" dur="${grid.duration}s" repeatCount="indefinite"/>
     </rect>`;
       }),
     )
@@ -145,10 +134,22 @@ function renderCells(matrix, theme, eatOrder) {
 }
 
 function renderSnakePath(route) {
-  const leadIn = `M ${Math.max(36, route[0].x - 44)} ${route[0].y + 30}`;
+  const leadIn = `M ${Math.max(36, route[0].x - 34)} ${route[0].y}`;
   const points = route.map((point) => `L ${point.x.toFixed(1)} ${point.y.toFixed(1)}`);
 
   return [leadIn, ...points].join(" ");
+}
+
+function pathLength(route) {
+  const points = [{ x: Math.max(36, route[0].x - 34), y: route[0].y }, ...route];
+
+  return points.slice(1).reduce((total, point, index) => {
+    const previous = points[index];
+    const dx = point.x - previous.x;
+    const dy = point.y - previous.y;
+
+    return total + Math.hypot(dx, dy);
+  }, 0);
 }
 
 function renderSvg(theme) {
@@ -158,6 +159,9 @@ function renderSvg(theme) {
   const eatOrder = buildEatOrder(route);
   const snakePath = renderSnakePath(route);
   const snakeHeadStart = route[0];
+  const snakeLength = 92;
+  const dashGap = Math.ceil(pathLength(route) + snakeLength + 80);
+  const dashOffset = dashGap;
 
   return `<svg width="1000" height="280" viewBox="0 0 1000 280" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="title desc">
   <title id="title">Junior Rondini commit trail</title>
@@ -173,9 +177,9 @@ function renderSvg(theme) {
     .level2{fill:${theme.levels[1]}}
     .level3{fill:${theme.levels[2]}}
     .level4{fill:${theme.levels[3]}}
-    .trail-guide{stroke:${theme.shadow};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.16}
-    .trail{stroke:${theme.snake};stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:150 850;stroke-dashoffset:1000;filter:url(#glow)}
-    .trail-hot{stroke:${theme.snakeHot};stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:42 958;stroke-dashoffset:1000}
+    .trail-guide{fill:none;stroke:none}
+    .trail{fill:none;stroke:${theme.snake};stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:${snakeLength} ${dashGap};stroke-dashoffset:${dashOffset};filter:url(#glow)}
+    .trail-hot{fill:none;stroke:${theme.snakeHot};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:28 ${dashGap};stroke-dashoffset:${dashOffset}}
     .head{fill:${theme.snake};filter:url(#glow)}
     .eye{fill:#0d1117}
     .spark{fill:${theme.snakeHot};animation:blink 1.8s ease-in-out infinite}
@@ -195,12 +199,12 @@ function renderSvg(theme) {
   <g>
     ${renderCells(matrix, theme, eatOrder)}
   </g>
-  <path id="eat-path" class="trail-guide" d="${snakePath}" pathLength="1000"/>
-  <path class="trail" d="${snakePath}" pathLength="1000">
-    <animate attributeName="stroke-dashoffset" values="1000;0;0" keyTimes="0;.92;1" dur="${grid.duration}s" repeatCount="indefinite"/>
+  <path id="eat-path" class="trail-guide" d="${snakePath}"/>
+  <path class="trail" d="${snakePath}">
+    <animate attributeName="stroke-dashoffset" values="${dashOffset};0" dur="${grid.duration}s" repeatCount="indefinite"/>
   </path>
-  <path class="trail-hot" d="${snakePath}" pathLength="1000">
-    <animate attributeName="stroke-dashoffset" values="1000;0;0" keyTimes="0;.92;1" dur="${grid.duration}s" repeatCount="indefinite"/>
+  <path class="trail-hot" d="${snakePath}">
+    <animate attributeName="stroke-dashoffset" values="${dashOffset};0" dur="${grid.duration}s" repeatCount="indefinite"/>
   </path>
   <g>
     <animateMotion dur="${grid.duration}s" repeatCount="indefinite" rotate="auto">
