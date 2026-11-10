@@ -20,7 +20,7 @@
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/divider-dark.svg"><img src="assets/divider-light.svg" alt="Neon circuit divider" width="100%"></picture>
 
-## 👨‍💻 About me
+## 💻 About me
 
 <p align="center">
   <picture><source media="(prefers-color-scheme: dark)" srcset="assets/terminal-dark.svg"><img src="assets/terminal-light.svg" alt="junior.config — Full stack, automation, Rust, Go, Zig, AI and esoteric projects" width="800"></picture>
