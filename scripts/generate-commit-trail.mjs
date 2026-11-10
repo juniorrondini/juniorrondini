@@ -1,218 +1,167 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const name = "JuniorRondini";
-
-const letters = {
-  J: ["11111", "00100", "00100", "00100", "10100", "10100", "01100"],
-  U: ["10001", "10001", "10001", "10001", "10001", "10001", "01110"],
-  N: ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
-  I: ["11111", "00100", "00100", "00100", "00100", "00100", "11111"],
-  O: ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
-  R: ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
-  D: ["11110", "10001", "10001", "10001", "10001", "10001", "11110"],
+export const GLYPHS = {
+  J: ['11111', '00100', '00100', '00100', '10100', '10100', '01100'],
+  U: ['10001', '10001', '10001', '10001', '10001', '10001', '01110'],
+  N: ['10001', '11001', '10101', '10011', '10001', '10001', '10001'],
+  I: ['11111', '00100', '00100', '00100', '00100', '00100', '11111'],
+  O: ['01110', '10001', '10001', '10001', '10001', '10001', '01110'],
+  R: ['11110', '10001', '10001', '11110', '10100', '10010', '10001'],
+  D: ['11110', '10001', '10001', '10001', '10001', '10001', '11110'],
 };
 
-const themes = {
-  light: {
-    file: "dist/juniorrondini-commit-snake-v4.svg",
-    background: "#f6f8fa",
-    panel: "#ffffff",
-    panelStroke: "#d0d7de",
-    text: "#24292f",
-    muted: "#57606a",
-    empty: "#ebedf0",
-    levels: ["#baf5c5", "#71e67a", "#43e424", "#1d8f36"],
-    snake: "#43e424",
-    snakeHot: "#b8ff7a",
-    shadow: "#43e424",
-  },
+export const GRID = { size: 10, step: 12, top: 82, width: 1000 };
+export const TIME = { duration: 24, start: 2.4, finish: 19.2, fade: 19.6, restore: 20.2, restored: 21.2 };
+export const THEMES = {
   dark: {
-    file: "dist/juniorrondini-commit-snake-v4-dark.svg",
-    background: "#0d1117",
-    panel: "#101820",
-    panelStroke: "#263241",
-    text: "#f0f6fc",
-    muted: "#8b949e",
-    empty: "#161b22",
-    levels: ["#13261a", "#216b35", "#43e424", "#b8ff7a"],
-    snake: "#43e424",
-    snakeHot: "#b8ff7a",
-    shadow: "#43e424",
+    bg: '#0d1117', panel: '#111b21', line: '#25343b', text: '#ecf4ef',
+    muted: '#97aaa2', accent: '#55edac', empty: '#1b2b2b', snake: '#e3fff1',
+    levels: ['#24976c', '#32ba84', '#43d999', '#67f0b3'],
+  },
+  light: {
+    bg: '#f6faf7', panel: '#ffffff', line: '#d5e4db', text: '#142d23',
+    muted: '#536f60', accent: '#087e54', empty: '#e4eee8', snake: '#123c2a',
+    levels: ['#21966b', '#18835b', '#10734d', '#086342'],
   },
 };
 
-function buildMatrix(value) {
-  const rows = Array.from({ length: 7 }, () => []);
-
-  [...value.toUpperCase()].forEach((char, index) => {
-    const glyph = letters[char];
-    if (!glyph) {
-      return;
-    }
-
-    glyph.forEach((row, rowIndex) => {
-      rows[rowIndex].push(...row.split(""));
-      if (index < value.length - 1) {
-        rows[rowIndex].push("0");
-      }
-    });
+export function buildMatrix(value = 'JUNIOR RONDINI') {
+  const glyphs = [...value.toUpperCase()].map(char => {
+    if (char === ' ') return Array(7).fill('0');
+    if (!GLYPHS[char]) throw new Error(`Unsupported signature character: ${char}`);
+    return GLYPHS[char];
   });
-
-  return rows;
+  return Array.from({ length: 7 }, (_, row) => glyphs.map(g => g[row]).join('0').split(''));
 }
 
-function cellClass(rowIndex, columnIndex) {
-  return `level${((rowIndex * 3 + columnIndex * 5) % 4) + 1}`;
-}
-
-const grid = {
-  size: 8,
-  gap: 3,
-  offsetX: 76,
-  offsetY: 126,
-  duration: 18,
-};
-
-function cellCenter(rowIndex, columnIndex) {
-  const step = grid.size + grid.gap;
-
-  return {
-    x: grid.offsetX + columnIndex * step + grid.size / 2,
-    y: grid.offsetY + rowIndex * step + grid.size / 2,
-  };
-}
-
-function buildRoute(matrix) {
-  const route = [];
-
-  for (let rowIndex = 0; rowIndex < matrix.length; rowIndex += 1) {
-    const columns =
-      rowIndex % 2 === 0
-        ? [...matrix[rowIndex].keys()]
-        : [...matrix[rowIndex].keys()].reverse();
-
-    columns.forEach((columnIndex) => {
-      route.push({ rowIndex, columnIndex, ...cellCenter(rowIndex, columnIndex) });
-    });
+export function buildRoute(matrix) {
+  const columns = matrix[0].length;
+  const left = (GRID.width - ((columns - 1) * GRID.step + GRID.size)) / 2 + GRID.size / 2;
+  const route = [{ x: left - 2 * GRID.step, y: GRID.top + GRID.size / 2 }];
+  for (let column = 0; column < columns; column++) {
+    for (let index = 0; index < 7; index++) {
+      const row = column % 2 === 0 ? index : 6 - index;
+      route.push({ x: left + column * GRID.step, y: GRID.top + row * GRID.step + GRID.size / 2, row, column });
+    }
   }
-
-  return route;
+  const last = route.at(-1);
+  route.push({ x: last.x + 8 * GRID.step, y: last.y });
+  let distance = 0;
+  return route.map((point, i) => {
+    if (i) distance += Math.hypot(point.x - route[i - 1].x, point.y - route[i - 1].y);
+    return { ...point, distance };
+  });
 }
 
-function buildEatOrder(route) {
-  return new Map(
-    route.map((point, index) => [`${point.rowIndex}:${point.columnIndex}`, index]),
-  );
+export function arrivalTime(point, route) {
+  return TIME.start + point.distance / route.at(-1).distance * (TIME.finish - TIME.start);
 }
 
-function renderCells(matrix, theme, eatOrder) {
-  const lastStep = Math.max(eatOrder.size - 1, 1);
+const fraction = seconds => (seconds / TIME.duration).toFixed(7);
+const xml = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
+const text = (x, y, size, color, value, extra = '') => `<text x="${x}" y="${y}" font-size="${size}" fill="${color}" ${extra}>${xml(value)}</text>`;
 
-  return matrix
-    .flatMap((row, rowIndex) =>
-      row.map((cell, columnIndex) => {
-        const x = grid.offsetX + columnIndex * (grid.size + grid.gap);
-        const y = grid.offsetY + rowIndex * (grid.size + grid.gap);
-        const cssClass = cell === "1" ? cellClass(rowIndex, columnIndex) : "empty";
-
-        if (cell !== "1") {
-          return `<rect class="${cssClass}" x="${x}" y="${y}" width="${grid.size}" height="${grid.size}" rx="2"/>`;
-        }
-
-        const order = eatOrder.get(`${rowIndex}:${columnIndex}`) ?? 0;
-        const eatStart = Math.max((order / lastStep) * 0.9, 0.001);
-        const eatEnd = Math.min(eatStart + 0.025, 0.93);
-        const keyTimes = `0;${eatStart.toFixed(4)};${eatEnd.toFixed(4)};.94;1`;
-
-        return `<rect class="${cssClass}" x="${x}" y="${y}" width="${grid.size}" height="${grid.size}" rx="2">
-      <animate attributeName="opacity" values="1;1;.12;.12;1" keyTimes="${keyTimes}" dur="${grid.duration}s" repeatCount="indefinite"/>
-      <animate attributeName="fill" values="${theme.levels.at(-1)};${theme.levels.at(-1)};${theme.empty};${theme.empty};${theme.levels.at(-1)}" keyTimes="${keyTimes}" dur="${grid.duration}s" repeatCount="indefinite"/>
-    </rect>`;
-      }),
-    )
-    .join("\n    ");
+function openSvg(height, title, desc) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="${height}" viewBox="0 0 1000 ${height}" role="img" aria-labelledby="title desc">
+<title id="title">${xml(title)}</title><desc id="desc">${xml(desc)}</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif}.mono{font-family:Consolas,'Courier New',monospace}</style>`;
 }
 
-function renderSnakePath(route) {
-  const leadIn = `M ${Math.max(36, route[0].x - 34)} ${route[0].y}`;
-  const points = route.map((point) => `L ${point.x.toFixed(1)} ${point.y.toFixed(1)}`);
-
-  return [leadIn, ...points].join(" ");
-}
-
-function renderSvg(theme) {
-  const matrix = buildMatrix(name);
+export function renderSnake(theme) {
+  const matrix = buildMatrix();
   const route = buildRoute(matrix);
-  const eatOrder = buildEatOrder(route);
-  const snakePath = renderSnakePath(route);
-  const snakeHeadStart = route[0];
-  const snakeLength = 54;
-  const hotLength = 16;
-  const dashEnd = -(1000 - snakeLength);
-  const hotDashEnd = -(1000 - hotLength);
-
-  return `<svg width="1000" height="280" viewBox="0 0 1000 280" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="title desc">
-  <title id="title">Junior Rondini commit trail</title>
-  <desc id="desc">A stylized contribution grid spelling JuniorRondini while a neon snake eats each commit cell.</desc>
-  <style>
-    .background{fill:${theme.background}}
-    .panel{fill:${theme.panel};stroke:${theme.panelStroke}}
-    .title{fill:${theme.text};font:700 28px Segoe UI,Arial,sans-serif}
-    .subtitle{fill:${theme.muted};font:600 13px Segoe UI,Arial,sans-serif;letter-spacing:.12em}
-    .caption{fill:${theme.muted};font:500 14px Segoe UI,Arial,sans-serif}
-    .empty{fill:${theme.empty};opacity:.32}
-    .level1{fill:${theme.levels[0]}}
-    .level2{fill:${theme.levels[1]}}
-    .level3{fill:${theme.levels[2]}}
-    .level4{fill:${theme.levels[3]}}
-    .trail-guide{fill:none;stroke:none}
-    .trail{fill:none;stroke:${theme.snake};stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:${snakeLength} 2000;stroke-dashoffset:${snakeLength};filter:url(#glow)}
-    .trail-hot{fill:none;stroke:${theme.snakeHot};stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:${hotLength} 2000;stroke-dashoffset:${hotLength}}
-    .head{fill:${theme.snake};filter:url(#glow)}
-    .eye{fill:#0d1117}
-    .spark{fill:${theme.snakeHot};animation:blink 1.8s ease-in-out infinite}
-    @keyframes blink{50%{opacity:.28}}
-  </style>
-  <defs>
-    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
-  <rect class="background" width="1000" height="280" rx="18"/>
-  <rect class="panel" x="24" y="24" width="952" height="232" rx="14"/>
-  <text class="subtitle" x="76" y="66">CUSTOM COMMIT TRAIL</text>
-  <text class="title" x="76" y="101">${name}</text>
-  <text class="caption" x="76" y="232">Snake mode: each glowing cell is eaten in sequence, then the signature respawns.</text>
-  <g>
-    ${renderCells(matrix, theme, eatOrder)}
-  </g>
-  <path id="eat-path" class="trail-guide" d="${snakePath}" pathLength="1000"/>
-  <path class="trail" d="${snakePath}" pathLength="1000">
-    <animate attributeName="stroke-dashoffset" values="${snakeLength};${dashEnd}" dur="${grid.duration}s" calcMode="linear" repeatCount="indefinite"/>
-  </path>
-  <path class="trail-hot" d="${snakePath}" pathLength="1000">
-    <animate attributeName="stroke-dashoffset" values="${hotLength};${hotDashEnd}" dur="${grid.duration}s" calcMode="linear" repeatCount="indefinite"/>
-  </path>
-  <g>
-    <animateMotion dur="${grid.duration}s" calcMode="paced" repeatCount="indefinite" rotate="auto">
-      <mpath href="#eat-path" xlink:href="#eat-path"/>
-    </animateMotion>
-    <circle class="head" cx="0" cy="0" r="13"/>
-    <circle class="eye" cx="4" cy="-4" r="2.2"/>
-    <circle class="eye" cx="5" cy="5" r="2.2"/>
-  </g>
-  <circle class="spark" cx="860" cy="86" r="4"/>
-  <circle class="spark" cx="898" cy="190" r="5" style="animation-delay:.55s"/>
-  <circle class="spark" cx="930" cy="132" r="3.5" style="animation-delay:1.1s"/>
-  <circle class="spark" cx="${snakeHeadStart.x}" cy="${snakeHeadStart.y}" r="3" style="animation-delay:1.4s"/>
-</svg>
-`;
+  const distance = route.at(-1).distance;
+  const path = route.map((p, i) => `${i ? 'L' : 'M'}${p.x},${p.y}`).join(' ');
+  const cells = route.filter(p => p.row !== undefined);
+  const backgroundCells = cells.map(p => `<rect x="${p.x - 5}" y="${p.y - 5}" width="10" height="10" rx="2" fill="${theme.empty}"/>`).join('');
+  const nameCells = animated => cells.filter(p => matrix[p.row][p.column] === '1').map(p => {
+    const eat = arrivalTime(p, route);
+    const animation = animated ? `<animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;${fraction(eat - .012)};${fraction(eat)};${fraction(TIME.restore)};${fraction(TIME.restored)};1" dur="24s" repeatCount="indefinite"/>` : '';
+    return `<rect data-cell="${p.row}:${p.column}" x="${p.x - 5}" y="${p.y - 5}" width="10" height="10" rx="2" fill="${theme.levels[(p.column + p.row) % 4]}">${animation}</rect>`;
+  }).join('');
+  const times = `0;${fraction(TIME.start)};${fraction(TIME.finish)};1`;
+  const bodyLength = GRID.step * 8;
+  return `${openSvg(246, 'Junior Rondini — commit signature', 'A snake eats a custom contribution-style grid spelling Junior Rondini. The signature reappears at the end of each loop. This is pixel art, not live contribution data.')}
+<style>.still{display:none}@media(prefers-reduced-motion:reduce){.motion{display:none}.still{display:inline}}</style>
+<rect x=".5" y=".5" width="999" height="237" rx="16" fill="${theme.bg}" stroke="${theme.line}"/>
+<circle cx="40" cy="36" r="4" fill="${theme.accent}"/>
+${text(54, 40, 12, theme.accent, 'THE COMMIT SIGNATURE', 'class="mono" letter-spacing="2"')}
+${text(960, 40, 12, theme.muted, 'EAT. BUILD. REPEAT.', 'class="mono" text-anchor="end"')}
+${backgroundCells}
+<g class="still">${nameCells(false)}</g>
+<g class="motion">${nameCells(true)}
+<g id="snake" opacity="0">
+<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;${fraction(TIME.start - .15)};${fraction(TIME.start)};${fraction(TIME.finish)};${fraction(TIME.fade)};1" dur="24s" repeatCount="indefinite"/>
+<path id="body" d="${path}" fill="none" stroke="${theme.snake}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${bodyLength} ${distance + bodyLength}" stroke-dashoffset="${bodyLength}">
+<animate attributeName="stroke-dashoffset" values="${bodyLength};${bodyLength};${bodyLength - distance};${bodyLength - distance}" keyTimes="${times}" dur="24s" repeatCount="indefinite"/>
+</path>
+<g id="head">
+<animateMotion path="${path}" keyPoints="0;0;1;1" keyTimes="${times}" calcMode="linear" rotate="auto" dur="24s" repeatCount="indefinite"/>
+<rect x="-6" y="-6" width="12" height="12" rx="4" fill="${theme.snake}"/>
+<circle cx="2.5" cy="-2.5" r="1.2" fill="${theme.bg}"/><circle cx="2.5" cy="2.5" r="1.2" fill="${theme.bg}"/>
+</g></g></g>
+<path d="M40 201H960" stroke="${theme.line}"/>
+${text(40, 222, 11, theme.muted, 'JUNIOR RONDINI / CUSTOM PIXEL ART', 'class="mono" letter-spacing="1"')}
+<g fill="${theme.accent}"><rect x="917" y="213" width="7" height="7" rx="1" opacity=".3"/><rect x="929" y="213" width="7" height="7" rx="1" opacity=".6"/><rect x="941" y="213" width="7" height="7" rx="1"/><rect x="953" y="213" width="7" height="7" rx="1"/></g>
+</svg>\n`;
 }
 
-mkdirSync("dist", { recursive: true });
+export function renderHero(t) {
+  const grid = Array.from({ length: 9 }, (_, row) => Array.from({ length: 9 }, (_, col) => {
+    const radius = Math.hypot(row - 4, col - 4);
+    const active = radius > 2 && radius < 4.5 && (row + col) % 3 !== 0;
+    return `<rect x="${737 + col * 18}" y="${58 + row * 18}" width="11" height="11" rx="2" fill="${active ? t.accent : t.empty}" opacity="${active ? .4 + ((row + col) % 4) * .2 : .7}"/>`;
+  }).join('')).join('');
+  return `${openSvg(322, 'Junior Rondini — Full Stack Developer', 'Real products. Unusual ideas. Full stack development, automation and creative engineering.')}
+<defs><radialGradient id="wash"><stop stop-color="${t.accent}" stop-opacity=".13"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0"/></radialGradient></defs>
+<rect x=".5" y=".5" width="999" height="309" rx="18" fill="${t.bg}" stroke="${t.line}"/>
+<ellipse cx="830" cy="140" rx="260" ry="200" fill="url(#wash)"/>
+<path d="M42 39H66" stroke="${t.accent}" stroke-width="3"/>
+${text(80, 43, 12, t.accent, 'FULL STACK DEVELOPER', 'class="mono" letter-spacing="2.2"')}
+${text(40, 126, 68, t.text, 'Junior Rondini', 'font-weight="700" letter-spacing="-3"')}
+${text(43, 171, 25, t.muted, 'Real products. Unusual ideas.', 'letter-spacing="-.5"')}
+${text(43, 207, 15, t.muted, 'From business systems to beautifully strange experiments.')}
+${grid}
+<rect x="791" y="112" width="53" height="53" rx="12" fill="${t.bg}" stroke="${t.accent}"/>
+${text(817, 147, 26, t.accent, '</>', 'class="mono" text-anchor="middle" font-weight="700"')}
+<path d="M42 249H958" stroke="${t.line}"/>
+${text(43, 280, 11, t.muted, 'SOFTWARE / AUTOMATION / CREATIVE ENGINEERING', 'class="mono" letter-spacing="1.1"')}
+${text(958, 280, 11, t.accent, '@juniorrondini', 'class="mono" text-anchor="end"')}
+</svg>\n`;
+}
 
-Object.values(themes).forEach((theme) => {
-  writeFileSync(theme.file, renderSvg(theme), "utf8");
-  console.log(`Wrote ${theme.file}`);
-});
+export const PROJECTS = [
+  { slug: 'zentinel', n: '01', name: 'Zentinel', category: 'SYSTEMS & SECURITY', summary: 'A fast file integrity monitor built with Zig.', stack: 'ZIG / SHA-256 / CLI', icon: 'M32 12L46 18V31C46 42 32 50 32 50S18 42 18 31V18Z M25 30L30 35L39 25' },
+  { slug: 'whisper', n: '02', name: 'Whisper', category: 'SAAS & REAL-TIME', summary: 'Customer support, connected in real time.', stack: 'GO / REACT / WEBSOCKET / POSTGRESQL', icon: 'M16 16H48V39H29L20 48V39H16Z M24 25H40 M24 31H35' },
+  { slug: 'esoteric', n: '03', name: 'Esoteric Suite', category: 'CREATIVE ENGINEERING', summary: 'Useful tools. Wonderfully unusual languages.', stack: 'ESOLANGS / TOOLKIT / LANGUAGE MUSEUM', icon: 'M25 17L13 31L25 45 M39 17L51 31L39 45 M35 13L29 49' },
+  { slug: 'ledgerfox', n: '04', name: 'LedgerFox', category: 'DESKTOP & LEGACY', summary: 'A financial manager with a retro desktop soul.', stack: 'VISUAL FOXPRO / DBF / WINDOWS', icon: 'M14 15H50V46H14Z M14 23H50 M22 31H28 M22 38H28 M35 31H42 M35 38H42' },
+];
+
+export function renderProject(t, p) {
+  return `${openSvg(120, `${p.name} — ${p.category}`, `${p.summary} ${p.stack}. Open the repository to explore the project.`)}
+<rect x=".5" y=".5" width="999" height="109" rx="13" fill="${t.panel}" stroke="${t.line}"/>
+<rect x="1" y="22" width="3" height="66" rx="1.5" fill="${t.accent}"/>
+<g transform="translate(24 23)" fill="none" stroke="${t.accent}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${p.icon}"/></g>
+${text(108, 31, 12, t.accent, `${p.n} / ${p.category}`, 'class="mono" letter-spacing="1.3"')}
+${text(108, 81, 44, t.text, p.name, 'font-weight="700" letter-spacing="-1"')}
+<circle cx="945" cy="55" r="20" fill="${t.bg}" stroke="${t.line}"/>
+<path d="M938 62L952 48 M938 48H952V62" fill="none" stroke="${t.accent}" stroke-width="1.5"/>
+</svg>\n`;
+}
+
+export function generateAssets(root = resolve(dirname(fileURLToPath(import.meta.url)), '..')) {
+  const output = resolve(root, 'assets');
+  mkdirSync(output, { recursive: true });
+  for (const [name, theme] of Object.entries(THEMES)) {
+    writeFileSync(resolve(output, `hero-${name}.svg`), renderHero(theme));
+    writeFileSync(resolve(output, `commit-snake-${name}.svg`), renderSnake(theme));
+    for (const project of PROJECTS) {
+      writeFileSync(resolve(output, `project-${project.slug}-${name}.svg`), renderProject(theme, project));
+    }
+  }
+  console.log('Generated 12 profile assets (light and dark).');
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) generateAssets();

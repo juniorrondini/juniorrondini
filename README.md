@@ -1,143 +1,95 @@
-<h1 align="center">Hi 👋, I'm Junior Rondini</h1>
-
-<h3 align="center">
-Full Stack Developer building scalable systems, creative tools and cursed side projects.
-</h3>
-
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=900&color=43E424&center=true&vCenter=true&width=620&lines=Full+Stack+Developer;Building+Real+Solutions;Open+Source+Creator;Exploring+Rust+Go+Zig+and+AI;Creating+Projects+That+Stand+Out" alt="Typing SVG" />
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
+  <img src="assets/hero-light.svg" alt="Junior Rondini — Full Stack Developer. Real products. Unusual ideas." width="100%">
+</picture>
 
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=juniorrondini&label=Profile+Views&color=43E424&style=flat" />
-  <img src="https://img.shields.io/github/followers/juniorrondini?label=Followers&style=flat&color=43E424" />
-  <img src="https://img.shields.io/badge/Open%20Source-Lover-43E424" />
-  <img src="https://img.shields.io/badge/Always-Learning-43E424" />
+  <a href="https://github.com/juniorrondini?tab=repositories"><strong>Explore my work</strong></a>
+  &nbsp; · &nbsp;
+  <a href="https://www.linkedin.com/in/juniorrondini">LinkedIn</a>
+  &nbsp; · &nbsp;
+  <a href="mailto:jjrondinijj@gmail.com">Let's talk</a>
 </p>
 
----
+## A little about me
 
-## 👨‍💻 About Me
+I build across the stack: interfaces, APIs, databases and the automation that connects them. I like turning real business problems into useful software — and taking the occasional detour into wonderfully strange programming languages.
 
-- 💻 Building backend, frontend and database solutions
-- 🚀 Focused on scalable apps, automation and real business systems
-- 🧠 Exploring modern languages, performance tools and creative engineering
-- 🔥 Turning ideas into products and experiments into repositories
-- 📚 Constantly learning, shipping and improving
+Currently exploring **high-performance tools**, **AI integrations** and **SaaS products**. Always building, learning and shipping.
 
----
+## Selected work
 
-## 🚀 Main Stack
-
-### Frontend
-<p>
-  <img src="https://skillicons.dev/icons?i=html,css,js,ts,angular,react,nextjs,tailwind,bootstrap,vite" />
-</p>
-
-### Backend
-<p>
-  <img src="https://skillicons.dev/icons?i=cs,dotnet,java,nodejs,python,php,spring,express" />
-</p>
-
-### Database
-<p>
-  <img src="https://skillicons.dev/icons?i=mysql,postgres,mongodb,sqlite,redis,firebase" />
-</p>
-
-### DevOps / Cloud / Tools
-<p>
-  <img src="https://skillicons.dev/icons?i=git,github,docker,kubernetes,linux,bash,nginx,grafana,postman,azure" />
-</p>
-
-### Mobile / Desktop / Engines
-<p>
-  <img src="https://skillicons.dev/icons?i=flutter,androidstudio,java,electron,unity" />
-</p>
-
----
-
-## 🧪 Exploring New Languages
-
-<p>
-  <img src="https://skillicons.dev/icons?i=rust,go,kotlin,swift,lua" />
-</p>
-
-Zig • Nim • Haskell • Prolog • Forth • COBOL • Fortran • Pascal • Lisp • Crystal
-
----
-
-## 💀 Viral / Fun / Esoteric Projects
-
-Brainfuck • LOLCODE • Rockstar • Whitespace • Chef • Befunge • ArnoldC • Piet
-
-> Because coding should also be fun.
-
----
-
-## 📦 Highlight Projects
-
-- 🚀 **Esoteric Suite** — useful tools written in useless languages
-- ⚡ **Zentinel** — file integrity monitor built with Zig
-- 🧠 Automation, APIs and dashboards for real-world business needs
-- 📱 Mobile and full stack applications
-
----
-
-## 📊 GitHub Stats
-
-<p align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=juniorrondini&show_icons=true&theme=tokyonight&hide_border=true&rank_icon=github" />
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=juniorrondini&layout=compact&theme=tokyonight&hide_border=true&langs_count=10" />
-</p>
-
-<p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=juniorrondini&theme=tokyonight&hide_border=true" />
-</p>
-
----
-
-## 🧠 Current Focus
-
-- High performance tools
-- AI integrations
-- SaaS products
-- Unique GitHub projects
-- Career growth through execution
-
----
-
-## 📫 Contact
-
-<p align="center">
-  <a href="https://www.linkedin.com/in/juniorrondini">
-    <img src="https://skillicons.dev/icons?i=linkedin" />
-  </a>
-  <a href="mailto:jjrondinijj@gmail.com">
-    <img src="https://skillicons.dev/icons?i=gmail" />
-  </a>
-  <a href="https://github.com/juniorrondini">
-    <img src="https://skillicons.dev/icons?i=github" />
-  </a>
-</p>
-
----
-
-<p align="center">
-  <strong>Build. Learn. Ship. Repeat.</strong>
-</p>
-
----
-
-## 🟩 Commit Trail
-
-<p align="center">
-  <strong>JuniorRondini carved into a commit grid, eaten cell by cell.</strong>
-</p>
-
-<p align="center">
+<a href="https://github.com/juniorrondini/Zentinel">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-snake-v4-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-snake-v4.svg" />
-    <img alt="Stylized commit grid spelling JuniorRondini while a neon snake eats each cell" src="https://raw.githubusercontent.com/juniorrondini/juniorrondini/output/juniorrondini-commit-snake-v4.svg" />
+    <source media="(prefers-color-scheme: dark)" srcset="assets/project-zentinel-dark.svg">
+    <img src="assets/project-zentinel-light.svg" alt="Zentinel — A fast file integrity monitor. Zig, SHA-256 and CLI tooling. Explore the repository." width="100%">
   </picture>
+</a>
+
+File integrity monitoring with SHA-256 snapshots and change detection. **Zig · CLI**
+
+<a href="https://github.com/juniorrondini/whisper">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/project-whisper-dark.svg">
+    <img src="assets/project-whisper-light.svg" alt="Whisper — Real-time customer support. Go, React, WebSocket and PostgreSQL. Explore the repository." width="100%">
+  </picture>
+</a>
+
+Real-time customer support with an internal dashboard and webchat. **Go · React · PostgreSQL**
+
+<a href="https://github.com/juniorrondini/Esoteric-Suite">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/project-esoteric-dark.svg">
+    <img src="assets/project-esoteric-light.svg" alt="Esoteric Suite — Useful tools in unusual languages. An open-source toolkit and esolang museum. Explore the repository." width="100%">
+  </picture>
+</a>
+
+A toolkit and language museum for wonderfully unusual programming languages. **Esolangs · Open source**
+
+<a href="https://github.com/juniorrondini/LedgerFox">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/project-ledgerfox-dark.svg">
+    <img src="assets/project-ledgerfox-light.svg" alt="LedgerFox — A retro desktop financial manager. Visual FoxPro, DBF and classic Windows aesthetics. Explore the repository." width="100%">
+  </picture>
+</a>
+
+A retro desktop financial manager with reports and local data storage. **Visual FoxPro · DBF**
+
+<p align="right"><a href="https://github.com/juniorrondini?tab=repositories">All repositories →</a></p>
+
+## My toolbox
+
+| Area | Technologies |
+| :--- | :--- |
+| **Frontend** | TypeScript · JavaScript · React · Next.js · Angular · Tailwind CSS |
+| **Backend** | C# / .NET · Java · Spring · Node.js · Python · PHP · Express |
+| **Data** | PostgreSQL · MySQL · MongoDB · Redis · SQLite · Firebase |
+| **Infrastructure** | Docker · Kubernetes · Linux · Azure · Nginx · Git · Grafana |
+| **Beyond the browser** | Flutter · Android · Electron · Unity |
+
+<details>
+  <summary><strong>The language rabbit hole</strong> — performance, classics &amp; the unexpected</summary>
+
+**Exploring:** Rust · Go · Zig · Kotlin · Swift · Lua · Nim · Haskell · Prolog · Forth · COBOL · Fortran · Pascal · Lisp · Crystal
+
+**For the fun of it:** Brainfuck · LOLCODE · Rockstar · Whitespace · Chef · Befunge · ArnoldC · Piet
+
+Because coding should also be fun.
+
+</details>
+
+## One commit at a time
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/commit-snake-dark.svg">
+  <img src="assets/commit-snake-light.svg" alt="An animated snake eats a contribution-style pixel grid spelling JUNIOR RONDINI, then the signature reappears." width="100%">
+</picture>
+
+<p align="center"><sub>A custom pixel signature inspired by the contribution graph.</sub></p>
+
+---
+
+<p align="center">
+  <strong>Build something useful. Make something unexpected.</strong><br>
+  <sub>Junior Rondini &nbsp; / &nbsp; <a href="mailto:jjrondinijj@gmail.com">jjrondinijj@gmail.com</a></sub>
 </p>
