@@ -1,0 +1,1 @@
+Technology marks are from [Devicon](https://github.com/devicons/devicon), commit 32fe1d3b3f36ad11f90ab94f7db59738139c2bf6, under its MIT license. Original marks belong to their owners. Icons are wrapped in local presentation tiles; the original paths are preserved.

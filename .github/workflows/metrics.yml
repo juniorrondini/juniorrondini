@@ -1,0 +1,44 @@
+name: Refresh public GitHub metrics
+
+on:
+  schedule:
+    - cron: '23 9 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/update-metrics.mjs
+      - scripts/profile-design.mjs
+      - scripts/generate-commit-trail.mjs
+      - .github/workflows/metrics.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-public-metrics
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Fetch public data and render cards
+        run: node scripts/update-metrics.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Validate refreshed artwork
+        run: node --test scripts/profile.test.mjs
+      - name: Save refreshed public metrics
+        run: |
+          git add assets/github-metrics.json assets/github-stats-*.svg assets/language-stats-*.svg
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refresh public profile metrics [skip ci]'
+          git push

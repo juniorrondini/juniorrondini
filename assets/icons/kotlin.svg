@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="82" viewBox="0 0 64 82" role="img"><title>Kotlin</title><rect x=".5" y=".5" width="63" height="76" rx="12" fill="#111e30" stroke="#263c56"/><rect x="6" y="5" width="52" height="52" rx="10" fill="#f4f8ff"/><svg x="10" y="9" width="44" height="44"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="a" x1="500.003" x2="-.097" y1="579.106" y2="1079.206" gradientTransform="translate(15.534 -96.774) scale(.1939)" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#e44857"/>
+      <stop offset=".469" stop-color="#c711e1"/>
+      <stop offset="1" stop-color="#7f52ff"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#a)" d="M112.484 112.484H15.516V15.516h96.968L64 64Zm0 0"/>
+</svg>
+<text x="32" y="70" text-anchor="middle" fill="#d9eaff" font-family="Arial,Helvetica,sans-serif" font-size="9">Kotlin</text></svg>

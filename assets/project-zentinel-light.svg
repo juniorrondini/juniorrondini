@@ -1,11 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="120" viewBox="0 0 1000 120" role="img" aria-labelledby="title desc">
-<title id="title">Zentinel — SYSTEMS &amp; SECURITY</title><desc id="desc">A fast file integrity monitor built with Zig. ZIG / SHA-256 / CLI. Open the repository to explore the project.</desc>
-<style>text{font-family:Arial,Helvetica,sans-serif}.mono{font-family:Consolas,'Courier New',monospace}</style>
-<rect x=".5" y=".5" width="999" height="109" rx="13" fill="#ffffff" stroke="#d5e4db"/>
-<rect x="1" y="22" width="3" height="66" rx="1.5" fill="#087e54"/>
-<g transform="translate(24 23)" fill="none" stroke="#087e54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 12L46 18V31C46 42 32 50 32 50S18 42 18 31V18Z M25 30L30 35L39 25"/></g>
-<text x="108" y="31" font-size="12" fill="#087e54" class="mono" letter-spacing="1.3">01 / SYSTEMS &amp; SECURITY</text>
-<text x="108" y="81" font-size="44" fill="#142d23" font-weight="700" letter-spacing="-1">Zentinel</text>
-<circle cx="945" cy="55" r="20" fill="#f6faf7" stroke="#d5e4db"/>
-<path d="M938 62L952 48 M938 48H952V62" fill="none" stroke="#087e54" stroke-width="1.5"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="252" viewBox="0 0 480 252" role="img" aria-labelledby="title"><title id="title">Zentinel — A fast file integrity monitor built with Zig. ZIG / SHA-256 / CLI</title><style>text{font-family:Arial,Helvetica,sans-serif}.mono{font-family:Consolas,'Courier New',monospace}.still{display:none}@media(prefers-reduced-motion:reduce){.motion{display:none}.still{display:inline}*{animation:none!important}}</style>
+<defs><radialGradient id="aura"><stop stop-color="#55edac" stop-opacity=".11"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>
+<rect x=".5" y=".5" width="479" height="239" rx="16" fill="#ffffff" stroke="#cad8ee"/>
+<ellipse cx="399" cy="52" rx="115" ry="100" fill="url(#aura)"/>
+<text x="23" y="28" font-size="10" fill="#506b86" class="mono" letter-spacing="1.1">01 / SYSTEMS &amp; SECURITY</text>
+<g transform="translate(377 33)" fill="none" stroke="#55edac" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M32 12L46 18V31C46 42 32 50 32 50S18 42 18 31V18Z M25 30L30 35L39 25"/></g>
+<text x="23" y="83" font-size="32" fill="#142b44" font-weight="800" letter-spacing="-1">Zentinel</text>
+<text x="24" y="119" font-size="18" fill="#506b86" >Fast file integrity monitoring.</text>
+<text x="24" y="146" font-size="17" fill="#506b86" >Snapshots. Hashes. Clear reports.</text>
+<path d="M24 170H455" stroke="#cad8ee"/>
+<text x="24" y="193" font-size="10" fill="#55edac" class="mono" letter-spacing=".5">ZIG / SHA-256 / CLI</text>
+<circle cx="28" cy="217" r="3" fill="#55edac"/><text x="40" y="221" font-size="11" fill="#506b86" class="mono" letter-spacing="1">EXPLORE THE REPOSITORY</text>
+<path d="M438 221L450 209 M438 209H450V221" fill="none" stroke="#55edac" stroke-width="1.5"/>
+<path class="motion" d="M16 239H464" stroke="#55edac" stroke-dasharray="60 448" stroke-width="1.5"><animate attributeName="stroke-dashoffset" values="508;-508" dur="8s" repeatCount="indefinite"/></path></svg>

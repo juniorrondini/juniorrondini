@@ -8,12 +8,14 @@ on:
       - assets/**
       - scripts/**
       - .github/workflows/snake.yml
+      - .github/workflows/metrics.yml
   pull_request:
     paths:
       - README.md
       - assets/**
       - scripts/**
       - .github/workflows/snake.yml
+      - .github/workflows/metrics.yml
   workflow_dispatch:
 
 permissions:

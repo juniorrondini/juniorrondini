@@ -1,11 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="120" viewBox="0 0 1000 120" role="img" aria-labelledby="title desc">
-<title id="title">Whisper — SAAS &amp; REAL-TIME</title><desc id="desc">Customer support, connected in real time. GO / REACT / WEBSOCKET / POSTGRESQL. Open the repository to explore the project.</desc>
-<style>text{font-family:Arial,Helvetica,sans-serif}.mono{font-family:Consolas,'Courier New',monospace}</style>
-<rect x=".5" y=".5" width="999" height="109" rx="13" fill="#111b21" stroke="#25343b"/>
-<rect x="1" y="22" width="3" height="66" rx="1.5" fill="#55edac"/>
-<g transform="translate(24 23)" fill="none" stroke="#55edac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16H48V39H29L20 48V39H16Z M24 25H40 M24 31H35"/></g>
-<text x="108" y="31" font-size="12" fill="#55edac" class="mono" letter-spacing="1.3">02 / SAAS &amp; REAL-TIME</text>
-<text x="108" y="81" font-size="44" fill="#ecf4ef" font-weight="700" letter-spacing="-1">Whisper</text>
-<circle cx="945" cy="55" r="20" fill="#0d1117" stroke="#25343b"/>
-<path d="M938 62L952 48 M938 48H952V62" fill="none" stroke="#55edac" stroke-width="1.5"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="252" viewBox="0 0 480 252" role="img" aria-labelledby="title"><title id="title">Whisper — Customer support, connected in real time. GO / REACT / WEBSOCKET / POSTGRESQL</title><style>text{font-family:Arial,Helvetica,sans-serif}.mono{font-family:Consolas,'Courier New',monospace}.still{display:none}@media(prefers-reduced-motion:reduce){.motion{display:none}.still{display:inline}*{animation:none!important}}</style>
+<defs><radialGradient id="aura"><stop stop-color="#54d9ff" stop-opacity=".11"/><stop offset="1" stop-color="#111e30" stop-opacity="0"/></radialGradient></defs>
+<rect x=".5" y=".5" width="479" height="239" rx="16" fill="#111e30" stroke="#263c56"/>
+<ellipse cx="399" cy="52" rx="115" ry="100" fill="url(#aura)"/>
+<text x="23" y="28" font-size="10" fill="#9ab2c9" class="mono" letter-spacing="1.1">02 / SAAS &amp; REAL-TIME</text>
+<g transform="translate(377 33)" fill="none" stroke="#54d9ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16H48V39H29L20 48V39H16Z M24 25H40 M24 31H35"/></g>
+<text x="23" y="83" font-size="32" fill="#eaf5ff" font-weight="800" letter-spacing="-1">Whisper</text>
+<text x="24" y="119" font-size="18" fill="#9ab2c9" >Customer support in real time.</text>
+<text x="24" y="146" font-size="17" fill="#9ab2c9" >Internal dashboard + webchat.</text>
+<path d="M24 170H455" stroke="#263c56"/>
+<text x="24" y="193" font-size="10" fill="#54d9ff" class="mono" letter-spacing=".5">GO / REACT / WEBSOCKET / POSTGRESQL</text>
+<circle cx="28" cy="217" r="3" fill="#54d9ff"/><text x="40" y="221" font-size="11" fill="#9ab2c9" class="mono" letter-spacing="1">EXPLORE THE REPOSITORY</text>
+<path d="M438 221L450 209 M438 209H450V221" fill="none" stroke="#54d9ff" stroke-width="1.5"/>
+<path class="motion" d="M16 239H464" stroke="#54d9ff" stroke-dasharray="60 448" stroke-width="1.5"><animate attributeName="stroke-dashoffset" values="508;-508" dur="9s" repeatCount="indefinite"/></path></svg>

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { buildMatrix, buildRoute, arrivalTime, renderSnake, GRID, TIME, THEMES } from './generate-commit-trail.mjs';
+import { renderHero, languageSlices, STACK } from './profile-design.mjs';
 
 test('signature spells the full name with a visible word gap', () => {
   const matrix = buildMatrix();
@@ -60,4 +61,37 @@ test('every local README image exists in the repository', () => {
     assert.ok(existsSync(fileURLToPath(new URL(path, root))), `Missing README image: ${path}`);
   }
   assert.ok(!readme.includes('raw.githubusercontent.com'));
+});
+
+test('name animation and rotating roles keep a readable reduced-motion version', () => {
+  for (const theme of Object.values(THEMES)) {
+    const hero = renderHero(theme);
+    assert.ok(hero.includes('id="name-trace"'));
+    assert.ok(hero.includes('attributeName="stroke-dashoffset"'));
+    assert.ok(hero.includes('attributeName="x1"'));
+    assert.ok(hero.includes('<g class="still"><text'));
+    assert.ok(hero.includes('>JUNIOR RONDINI</text>'));
+    assert.ok(!/NaN|undefined|<script|foreignObject/.test(hero));
+  }
+});
+
+test('public statistics are complete and language slices account for all source bytes', () => {
+  const metrics = JSON.parse(readFileSync(new URL('../assets/github-metrics.json',import.meta.url),'utf8'));
+  for (const key of ['publicRepos','stars','followers','forks','repositoriesMeasured']) {
+    assert.ok(Number.isSafeInteger(metrics[key]) && metrics[key] >= 0, `Invalid metric ${key}`);
+  }
+  assert.ok(Object.values(metrics.languages).every(bytes=>Number.isSafeInteger(bytes) && bytes>0));
+  const slices = languageSlices(metrics);
+  const total = Object.values(metrics.languages).reduce((a,b)=>a+b,0);
+  assert.equal(slices.reduce((sum,s)=>sum+s.bytes,0),total);
+  assert.ok(Math.abs(slices.reduce((sum,s)=>sum+s.ratio,0)-1) < 1e-9);
+});
+
+test('all technology icons are local and retain their source license', () => {
+  for (const icon of new Set(STACK.flatMap(group=>group.icons))) {
+    const source = readFileSync(new URL(`../assets/icons/${icon}.svg`,import.meta.url),'utf8');
+    assert.ok(source.includes('<title>'));
+    assert.ok(!/<script|foreignObject|<image|@import|href="https?:/i.test(source));
+  }
+  assert.ok(existsSync(new URL('../assets/icons/LICENSE',import.meta.url)));
 });

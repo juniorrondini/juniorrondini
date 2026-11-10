@@ -1,6 +1,7 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as design from './profile-design.mjs';
 
 export const GLYPHS = {
   J: ['11111', '00100', '00100', '00100', '10100', '10100', '01100'],
@@ -16,13 +17,13 @@ export const GRID = { size: 10, step: 12, top: 82, width: 1000 };
 export const TIME = { duration: 24, start: 2.4, finish: 19.2, fade: 19.6, restore: 20.2, restored: 21.2 };
 export const THEMES = {
   dark: {
-    bg: '#0d1117', panel: '#111b21', line: '#25343b', text: '#ecf4ef',
-    muted: '#97aaa2', accent: '#55edac', empty: '#1b2b2b', snake: '#e3fff1',
+    bg: '#080f1c', panel: '#111e30', line: '#263c56', text: '#eaf5ff',
+    muted: '#9ab2c9', accent: '#62f5b8', cyan: '#54d9ff', violet: '#bca8ff', empty: '#192b3b', snake: '#e3fff1',
     levels: ['#24976c', '#32ba84', '#43d999', '#67f0b3'],
   },
   light: {
-    bg: '#f6faf7', panel: '#ffffff', line: '#d5e4db', text: '#142d23',
-    muted: '#536f60', accent: '#087e54', empty: '#e4eee8', snake: '#123c2a',
+    bg: '#f2f7ff', panel: '#ffffff', line: '#cad8ee', text: '#142b44',
+    muted: '#506b86', accent: '#068156', cyan: '#007fa3', violet: '#7753ca', empty: '#e2ebf5', snake: '#123c2a',
     levels: ['#21966b', '#18835b', '#10734d', '#086342'],
   },
 };
@@ -108,29 +109,7 @@ ${text(40, 222, 11, theme.muted, 'JUNIOR RONDINI / CUSTOM PIXEL ART', 'class="mo
 </svg>\n`;
 }
 
-export function renderHero(t) {
-  const grid = Array.from({ length: 9 }, (_, row) => Array.from({ length: 9 }, (_, col) => {
-    const radius = Math.hypot(row - 4, col - 4);
-    const active = radius > 2 && radius < 4.5 && (row + col) % 3 !== 0;
-    return `<rect x="${737 + col * 18}" y="${58 + row * 18}" width="11" height="11" rx="2" fill="${active ? t.accent : t.empty}" opacity="${active ? .4 + ((row + col) % 4) * .2 : .7}"/>`;
-  }).join('')).join('');
-  return `${openSvg(322, 'Junior Rondini — Full Stack Developer', 'Real products. Unusual ideas. Full stack development, automation and creative engineering.')}
-<defs><radialGradient id="wash"><stop stop-color="${t.accent}" stop-opacity=".13"/><stop offset="1" stop-color="${t.bg}" stop-opacity="0"/></radialGradient></defs>
-<rect x=".5" y=".5" width="999" height="309" rx="18" fill="${t.bg}" stroke="${t.line}"/>
-<ellipse cx="830" cy="140" rx="260" ry="200" fill="url(#wash)"/>
-<path d="M42 39H66" stroke="${t.accent}" stroke-width="3"/>
-${text(80, 43, 12, t.accent, 'FULL STACK DEVELOPER', 'class="mono" letter-spacing="2.2"')}
-${text(40, 126, 68, t.text, 'Junior Rondini', 'font-weight="700" letter-spacing="-3"')}
-${text(43, 171, 25, t.muted, 'Real products. Unusual ideas.', 'letter-spacing="-.5"')}
-${text(43, 207, 15, t.muted, 'From business systems to beautifully strange experiments.')}
-${grid}
-<rect x="791" y="112" width="53" height="53" rx="12" fill="${t.bg}" stroke="${t.accent}"/>
-${text(817, 147, 26, t.accent, '</>', 'class="mono" text-anchor="middle" font-weight="700"')}
-<path d="M42 249H958" stroke="${t.line}"/>
-${text(43, 280, 11, t.muted, 'SOFTWARE / AUTOMATION / CREATIVE ENGINEERING', 'class="mono" letter-spacing="1.1"')}
-${text(958, 280, 11, t.accent, '@juniorrondini', 'class="mono" text-anchor="end"')}
-</svg>\n`;
-}
+export function renderHero(t) { return design.renderHero(t); }
 
 export const PROJECTS = [
   { slug: 'zentinel', n: '01', name: 'Zentinel', category: 'SYSTEMS & SECURITY', summary: 'A fast file integrity monitor built with Zig.', stack: 'ZIG / SHA-256 / CLI', icon: 'M32 12L46 18V31C46 42 32 50 32 50S18 42 18 31V18Z M25 30L30 35L39 25' },
@@ -139,29 +118,30 @@ export const PROJECTS = [
   { slug: 'ledgerfox', n: '04', name: 'LedgerFox', category: 'DESKTOP & LEGACY', summary: 'A financial manager with a retro desktop soul.', stack: 'VISUAL FOXPRO / DBF / WINDOWS', icon: 'M14 15H50V46H14Z M14 23H50 M22 31H28 M22 38H28 M35 31H42 M35 38H42' },
 ];
 
-export function renderProject(t, p) {
-  return `${openSvg(120, `${p.name} — ${p.category}`, `${p.summary} ${p.stack}. Open the repository to explore the project.`)}
-<rect x=".5" y=".5" width="999" height="109" rx="13" fill="${t.panel}" stroke="${t.line}"/>
-<rect x="1" y="22" width="3" height="66" rx="1.5" fill="${t.accent}"/>
-<g transform="translate(24 23)" fill="none" stroke="${t.accent}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${p.icon}"/></g>
-${text(108, 31, 12, t.accent, `${p.n} / ${p.category}`, 'class="mono" letter-spacing="1.3"')}
-${text(108, 81, 44, t.text, p.name, 'font-weight="700" letter-spacing="-1"')}
-<circle cx="945" cy="55" r="20" fill="${t.bg}" stroke="${t.line}"/>
-<path d="M938 62L952 48 M938 48H952V62" fill="none" stroke="${t.accent}" stroke-width="1.5"/>
-</svg>\n`;
-}
+export function renderProject(t, p) { return design.renderProject(t, p, PROJECTS.indexOf(p)); }
 
 export function generateAssets(root = resolve(dirname(fileURLToPath(import.meta.url)), '..')) {
   const output = resolve(root, 'assets');
   mkdirSync(output, { recursive: true });
+  const metricsPath = resolve(output, 'github-metrics.json');
+  const metrics = existsSync(metricsPath) ? JSON.parse(readFileSync(metricsPath, 'utf8')) : null;
   for (const [name, theme] of Object.entries(THEMES)) {
     writeFileSync(resolve(output, `hero-${name}.svg`), renderHero(theme));
     writeFileSync(resolve(output, `commit-snake-${name}.svg`), renderSnake(theme));
+    writeFileSync(resolve(output, `roles-${name}.svg`), design.renderRoles(theme));
+    writeFileSync(resolve(output, `terminal-${name}.svg`), design.renderTerminal(theme));
+    writeFileSync(resolve(output, `divider-${name}.svg`), design.renderDivider(theme));
+    writeFileSync(resolve(output, `footer-${name}.svg`), design.renderFooter(theme));
+    for (const social of design.SOCIALS) writeFileSync(resolve(output, `social-${social.id}-${name}.svg`), design.renderSocial(theme, social));
+    if (metrics) {
+      writeFileSync(resolve(output, `github-stats-${name}.svg`), design.renderGithubStats(theme, metrics));
+      writeFileSync(resolve(output, `language-stats-${name}.svg`), design.renderLanguageStats(theme, metrics));
+    }
     for (const project of PROJECTS) {
       writeFileSync(resolve(output, `project-${project.slug}-${name}.svg`), renderProject(theme, project));
     }
   }
-  console.log('Generated 12 profile assets (light and dark).');
+  console.log('Generated animated profile artwork, social buttons, project cards and statistics.');
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) generateAssets();
